@@ -1,38 +1,51 @@
-def select_cards(possible_cards, hand)
-  cards = 0
-  total = 0 # created this to make sure program doesn't loop infinitely
-  while cards < 3 && total < 5
-    possible_cards.each do |current_card|
-      if cards < 3
-        print "Do you want to pick up #{current_card}?"
-        answer = gets.chomp
-        if answer.downcase == 'y'
-          hand << current_card
-          cards += 1
-          total += 1
-        else
-          total += 1
-        end
-      end
-    end
+class Deck
+
+  def initialize
+    @cards = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
   end
-  return hand
+
+  def deal
+    @cards.sample
+  end
+
 end
 
-available_cards = ['queen of spades', '2 of clubs', '3 of diamonds', 'jack of spades', 'queen of hearts']
+class Hand
 
-new_hand = select_cards(available_cards, [])
+  def initialize
+    @hand = []
+  end
 
-display_hand = new_hand.join("\n")
+  def score
+    score = 0
+    @hand.each do |number|
+      score += number
+    end
+    return score
+  end
 
-puts "Your new hand is: \n#{display_hand}"
+  def add_card(card)
+    @hand << card
+    return @hand
+  end
 
-# Do you want to pick up queen of spades?y
-# Do you want to pick up 2 of clubs?n
-# Do you want to pick up 3 of diamonds?n
-# Do you want to pick up jack of spades?y
-# Do you want to pick up queen of hearts?y
-# Your new hand is:
-# queen of spades
-# jack of spades
-# queen of hearts
+end
+
+def game
+
+  deck = Deck.new
+  hand = Hand.new
+  puts "Draw a card?"
+  while hand.score <= 21
+    answer = gets.chomp
+    if answer.downcase == 'y'
+      hand.add_card(deck.deal)
+      puts "Your score is #{hand.score}. Draw again?"
+    else
+      return "Your score is #{hand.score}."
+    end
+  end
+  return "You went over 21!"
+end
+
+p game
